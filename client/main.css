@@ -1,0 +1,29 @@
+body {
+	margin: 0;
+}
+
+main {
+	margin: 10px;
+
+}
+
+.grid {
+	display: flex;
+	flex-wrap: wrap;
+}
+
+.col {
+	width: 100%;
+}
+
+.card {
+	width: auto;
+	margin: 10px;
+}
+
+.footer {
+	position: fixed;
+  margin: auto;
+  width: 100%;
+  bottom: 0;
+}
