@@ -6,12 +6,17 @@ export default class FavoriteCard extends React.Component {
 	constructor(){
 		super();
 
+		this.handleTouchTap = this.handleTouchTap.bind(this);
+	}
+
+	handleTouchTap(){
+		this.props.onTouchTap();
 	}
 
 	render(){
 		return (
 			<div className="col">
-				<Card className="card">
+				<Card className="card" onTouchTap={this.handleTouchTap}>
 			    <CardHeader
 			      title={this.props.favorite.desc}
 			    />

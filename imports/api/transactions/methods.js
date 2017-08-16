@@ -1,5 +1,6 @@
 import { Meteor } from 'meteor/meteor';
 import { check } from 'meteor/check';
+import { Transactions } from '/imports/startup/both/collections.js';
 
 Meteor.methods({
   postTransaction(desc, date, amount, category) {

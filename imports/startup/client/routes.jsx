@@ -4,16 +4,55 @@ import {mount} from 'react-mounter';
 
 // layouts
 import {MainLayout} from '../../ui/layouts/MainLayout.jsx';
+import {PublicLayout} from '../../ui/layouts/PublicLayout.jsx';
 import {NotFoundLayout} from '../../ui/layouts/NotFoundLayout.jsx';
 
 // Import needed templates
+import SignInWrapper from '../../ui/pages/SignInWrapper.jsx'
 import DashboardWrapper from '../../ui/pages/DashboardWrapper.jsx';
 import SummaryWrapper from '../../ui/pages/SummaryWrapper.jsx';
 import TransactionsWrapper from '../../ui/pages/TransactionsWrapper.jsx';
 import NotFoundWrapper from '../../ui/pages/NotFoundWrapper.jsx';
 
+function signInForceCheck(context) {
+  // context is the output of `FlowRouter.current()`
+	if(!Meteor.userId()){
+		FlowRouter.go(FlowRouter.path("signin"));
+	}
+}
+
 // Set up all routes in the app
-FlowRouter.route('/', {
+let publicRoutes = FlowRouter.group({
+	prefix: "/",
+	name: "public"
+});
+
+publicRoutes.route('/', {
+	name: "signin",
+	action() {
+		mount(PublicLayout, { 
+			content: (<SignInWrapper />)
+		})
+	}
+});
+
+// publicRoutes.route('/join', {
+// 	name: "join",
+// 	action() {
+// 		mount(PublicLayout, {
+// 			content: (<CreateAccountWrapper />)
+// 		})
+// 	}
+// });
+
+
+let appRoutes = FlowRouter.group({
+	prefix: "/app",
+	name: "app",
+	triggersEnter: [signInForceCheck]
+})
+
+appRoutes.route('/', {
   name: 'dashboard',
   action() {
     mount(MainLayout, {
@@ -24,7 +63,7 @@ FlowRouter.route('/', {
   }
 });
 
-FlowRouter.route('/transactions', {
+appRoutes.route('/transactions', {
   name: 'transactions',
   action() {
     mount(MainLayout, {
@@ -35,7 +74,7 @@ FlowRouter.route('/transactions', {
   }
 });
 
-FlowRouter.route('/summary', {
+appRoutes.route('/summary', {
   name: 'summary',
   action() {
     mount(MainLayout, {
@@ -45,6 +84,8 @@ FlowRouter.route('/summary', {
 		})
   }
 });
+
+
 
 FlowRouter.notFound = {
   action() {

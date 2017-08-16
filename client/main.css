@@ -21,6 +21,12 @@ main {
 	margin: 10px;
 }
 
+.center-panel {
+	margin: auto;
+	max-width: 400px;
+	padding: 100px 0px;
+}
+
 .footer {
 	position: fixed;
   margin: auto;
