@@ -12,6 +12,7 @@
     "react": "^15.5.4",
     "react-dom": "^15.5.4",
     "react-mounter": "^1.2.0",
-    "react-tap-event-plugin": "^2.0.1"
+    "react-tap-event-plugin": "^2.0.1",
+    "websocket-driver": "^0.7.0"
   }
 }
