@@ -12,12 +12,19 @@ import SignInWrapper from '../../ui/pages/SignInWrapper.jsx'
 import DashboardWrapper from '../../ui/pages/DashboardWrapper.jsx';
 import SummaryWrapper from '../../ui/pages/SummaryWrapper.jsx';
 import TransactionsWrapper from '../../ui/pages/TransactionsWrapper.jsx';
+import CategoriesWrapper from '../../ui/pages/CategoriesWrapper.jsx';
 import NotFoundWrapper from '../../ui/pages/NotFoundWrapper.jsx';
 
 function signInForceCheck(context) {
   // context is the output of `FlowRouter.current()`
 	if(!Meteor.userId()){
 		FlowRouter.go(FlowRouter.path("signin"));
+	}
+}
+
+function autoForward() {
+	if ( Meteor.userId() ) {
+		FlowRouter.go(FlowRouter.path("dashboard"));
 	}
 }
 
@@ -30,10 +37,11 @@ let publicRoutes = FlowRouter.group({
 publicRoutes.route('/', {
 	name: "signin",
 	action() {
-		mount(PublicLayout, { 
+		mount(PublicLayout, {
 			content: (<SignInWrapper />)
 		})
-	}
+	},
+	triggersEnter: [autoForward]
 });
 
 // publicRoutes.route('/join', {
@@ -85,7 +93,16 @@ appRoutes.route('/summary', {
   }
 });
 
-
+appRoutes.route('/categories', {
+  name: 'categories',
+  action() {
+    mount(MainLayout, {
+			header: "View/Edit Categories",
+			index: 3,
+			content: (<CategoriesWrapper />)
+		})
+  }
+});
 
 FlowRouter.notFound = {
   action() {

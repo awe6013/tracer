@@ -10,7 +10,7 @@ export default class FavoriteCard extends React.Component {
 	}
 
 	handleTouchTap(){
-		this.props.onTouchTap();
+		this.props.onTouchTap(this.props.favorite._id);
 	}
 
 	render(){

@@ -45,6 +45,11 @@ export default class Footer extends React.Component {
 	            icon={this.favoritesIcon}
 	            onTouchTap={this.goTo.bind(this, "summary")}
 	          />
+						<BottomNavigationItem
+	            label="Categories"
+	            icon={this.favoritesIcon}
+	            onTouchTap={this.goTo.bind(this, "categories")}
+	          />
 	        </BottomNavigation>
 	      </Paper>
 			</div>

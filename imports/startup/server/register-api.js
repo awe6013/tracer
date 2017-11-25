@@ -4,7 +4,7 @@ import '../../api/categories/methods.js';
 import '../../api/categories/server/publish.js';
 
 import '../../api/preferences/methods.js';
-//import '../../api/links/server/publications.js';
+import '../../api/preferences/server/publish.js';
 
 import '../../api/transactions/methods.js';
 import '../../api/transactions/server/publish.js';

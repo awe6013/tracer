@@ -1,6 +1,6 @@
 import React from 'react';
 import TrackerReact from 'meteor/ultimatejs:tracker-react';
-import { Categories } from '/imports/startup/both/collections.js';
+import { loadCategories } from '/imports/api/categories/categories.js';
 import AutoComplete from 'material-ui/AutoComplete';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
@@ -9,19 +9,17 @@ import DatePicker from 'material-ui/DatePicker';
 
 
 export default class TransactionForm extends TrackerReact(React.Component) {
-	constructor(){
-		super();
+	constructor(props){
+		super(props);
 
 		this.state = {
-			open: false,
 			description: "",
-			category: "",
+			category: props.category ? props.category : "",
 			date: new Date(),
 			amount: ""
 		}
 
-		this.open = this.open.bind(this);
-		this.close = this.close.bind(this);
+		this.onClose = this.onClose.bind(this);
 		this.handleDescriptionChange = this.handleDescriptionChange.bind(this);
 		this.handleCategoryChoice = this.handleCategoryChoice.bind(this);
 		this.handleDateChange = this.handleDateChange.bind(this);
@@ -31,12 +29,10 @@ export default class TransactionForm extends TrackerReact(React.Component) {
 
 	}
 
-	open(){
-		this.setState({open: true});
-	}
-
-	close(){
-		this.setState({open: false});
+	componentWillReceiveProps( nextProps ) {
+		if ( nextProps.category ) {
+			this.setState({category: nextProps.category});
+		}
 	}
 
 	submit(){
@@ -51,7 +47,6 @@ export default class TransactionForm extends TrackerReact(React.Component) {
 			amount,
 			this.state.category
 		);
-		this.close();
 		this.initializeState();
 	}
 
@@ -64,13 +59,12 @@ export default class TransactionForm extends TrackerReact(React.Component) {
 		});
 	}
 
-	getCategories(){
-		// let categories = [];
-		// Categories.find().fetch().forEach( (category) => {
-		// 	categories.push(category.desc);
-		// });;
+	onClose(){
+		this.props.onClose();
+	}
 
-		return Categories.find().fetch();
+	getCategories(){
+		return loadCategories();
 	}
 
 	getActions(){
@@ -78,7 +72,7 @@ export default class TransactionForm extends TrackerReact(React.Component) {
 			<FlatButton
 				label="Cancel"
 				primary={true}
-				onTouchTap={this.close} />,
+				onTouchTap={this.onClose} />,
 			<FlatButton
 				label="Post"
 				primary={true}
@@ -110,21 +104,25 @@ export default class TransactionForm extends TrackerReact(React.Component) {
 				<Dialog
 					title="Post new transaction"
 					actions={actions}
-					modal={true}
-					open={this.state.open}
-					>
+					modal={false}
+					onRequestClose={this.onClose}
+					open={this.props.open}
+				>
 					<TextField
 						floatingLabelText="Description"
 						value={this.state.description}
 						onChange={this.handleDescriptionChange}
-						/>
+					/>
 
 					<AutoComplete
 						onNewRequest={this.handleCategoryChoice}
 						hintText="Category"
 						dataSourceConfig={{text: "desc", value: "_id"}}
 						dataSource={this.getCategories()}
-						fullWidth={true} />
+						fullWidth={true}
+						openOnFocus={true}
+						maxSearchResults={8}
+					/>
 
 					<DatePicker
 						floatingLabelText="Date"
